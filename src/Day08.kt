@@ -6,37 +6,22 @@ fun main() {
         }
     }
 
-    fun String.getDigit(): Int? {
-        return when (this.length) {
-            2 -> 1
-            3 -> 7
-            4 -> 4
-            7 -> 8
-            else -> null
-        }
-    }
-
     fun String.sortChars() = this.toSortedSet().joinToString("")
 
     fun Set<Char>.joinToString() = this.joinToString("")
 
-    fun decipher(patterns: List<String>, output: List<String>): Int {
-        val pattern1 = patterns.first { it.getDigit() == 1 }.toSet()
-        val pattern3 = patterns.filter { it.length == 5 }.map { it.toSet() }.first { it.containsAll(pattern1) }
-        val pattern4 = patterns.first { it.getDigit() == 4 }.toSet()
-        val pattern6 = patterns.filter { it.length == 6 }.map { it.toSet() }.first { !it.containsAll(pattern1) }
-        val pattern7 = patterns.first { it.getDigit() == 7 }.toSet()
-        val pattern8 = patterns.first { it.getDigit() == 8 }.toSet()
-        val pattern5 = patterns.filter { it.length == 5 && !pattern3.containsAll(it.toSet()) }
-            .first { it.count { !pattern6.contains(it) } == 0 }.toSet()
-        val pattern2 = patterns.filter { it.length == 5 }
-            .first { !pattern3.containsAll(it.toSet()) && !pattern5.containsAll(it.toSet()) }
-            .toSet()
+    fun decipher(patterns: List<Set<Char>>, output: List<String>): Int {
+        val pattern1 = patterns.first { it.size == 2 }
+        val pattern4 = patterns.first { it.size == 4 }
+        val pattern7 = patterns.first { it.size == 3 }
+        val pattern8 = patterns.first { it.size == 7 }
+        val pattern3 = patterns.first { it.size == 5 && it.containsAll(pattern1) }
+        val pattern6 = patterns.first { it.size == 6 && !it.containsAll(pattern1) }
+        val pattern5 = patterns.first { it.size == 5 && !pattern3.containsAll(it) && it.count { !pattern6.contains(it) } == 0 }
+        val pattern2 = patterns.first { it.size == 5 && !pattern3.containsAll(it) && !pattern5.containsAll(it) }
         val e = pattern6.first { !pattern5.contains(it) }
         val pattern9 = pattern8.filter { it != e }.toSet()
-        val pattern0 = patterns.filter { it.length == 6 }
-            .first { !pattern6.containsAll(it.toSet()) && !pattern9.containsAll(it.toSet()) }
-            .toSet()
+        val pattern0 = patterns.first { it.size == 6 && !pattern6.containsAll(it) && !pattern9.containsAll(it) }
 
         val val0 = pattern0.joinToString()
         val val1 = pattern1.joinToString()
@@ -67,9 +52,9 @@ fun main() {
 
     }
 
-    fun parseLine(line: String): Pair<List<String>, List<String>> {
+    fun parseLine(line: String): Pair<List<Set<Char>>, List<String>> {
         return line.split("|").map { it.trim() }.let {
-            val patterns = it[0].split(" ").map { it.sortChars() }
+            val patterns = it[0].split(" ").map { it.toSortedSet() }
             val output = it[1].split(" ").map { it.sortChars() }
             patterns to output
         }
