@@ -49,7 +49,7 @@ fun main() {
         return null
     }
 
-    fun String.complete(): List<Char> {
+    fun String.remaining(): List<Char> {
         val queue = LinkedList<Char>()
         this.forEach {
             when (it) {
@@ -66,7 +66,7 @@ fun main() {
 
     fun part2(input: List<String>): Long {
         val scores = input.filter { it.getIllegalChar() == null }
-            .map { it.complete().toScore() }
+            .map { it.remaining().toScore() }
             .sorted()
         return scores[scores.size / 2]
     }
