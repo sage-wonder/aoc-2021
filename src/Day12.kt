@@ -30,12 +30,15 @@ fun main() {
             if (start == end) return listOf(path + listOf(end))
             val path = path + listOf(start)
             fun canVisit(n: String): Boolean {
+                // Nope. you can't go back to start
                 if (n == "start") return false
+
+                // Must be a big cave or
+                // never been here before or
+                // no other small cave was visited more than once before
                 return n != n.lowercase()
                         || !path.contains(n)
-                        || path.filter { it == it.lowercase() }
-                    .groupBy { it }
-                    .filter { it.value.size > 1 }.isEmpty()
+                        || path.filter { it == it.lowercase() }.groupBy { it }.filter { it.value.size > 1 }.isEmpty()
             }
 
             val neighbors = this[start]?.filter { canVisit(it) } ?: emptySet()
