@@ -15,10 +15,10 @@ fun main() {
     fun part1(graph: Graph): Int {
         fun Graph.buildPath(path: List<String>, start: String, end: String): List<List<String>> {
             if (start == end) return listOf(path + listOf(end))
-            val path = path + listOf(start)
-            fun canVisit(n: String) = n != n.lowercase() || !path.contains(n)
+            val newPath = path + listOf(start)
+            fun canVisit(n: String) = n != n.lowercase() || !newPath.contains(n)
             val neighbors = this[start]?.filter { canVisit(it) } ?: emptySet()
-            return neighbors.flatMap { buildPath(path, it, end) }
+            return neighbors.flatMap { buildPath(newPath, it, end) }
         }
         return graph.buildPath(emptyList(), "start", "end")
             .onEach { println(it) }
@@ -28,7 +28,7 @@ fun main() {
     fun part2(graph: Graph): Int {
         fun Graph.buildPath(path: List<String>, start: String, end: String): List<List<String>> {
             if (start == end) return listOf(path + listOf(end))
-            val path = path + listOf(start)
+            val newPath = path + listOf(start)
             fun canVisit(n: String): Boolean {
                 // Nope. you can't go back to start
                 if (n == "start") return false
@@ -37,12 +37,12 @@ fun main() {
                 // never been here before or
                 // no other small cave was visited more than once before
                 return n != n.lowercase()
-                        || !path.contains(n)
-                        || path.filter { it == it.lowercase() }.groupBy { it }.filter { it.value.size > 1 }.isEmpty()
+                        || !newPath.contains(n)
+                        || newPath.filter { it == it.lowercase() }.groupBy { it }.filter { it.value.size > 1 }.isEmpty()
             }
 
             val neighbors = this[start]?.filter { canVisit(it) } ?: emptySet()
-            return neighbors.flatMap { buildPath(path, it, end) }
+            return neighbors.flatMap { buildPath(newPath, it, end) }
         }
         return graph.buildPath(emptyList(), "start", "end")
             .onEach { println(it) }
