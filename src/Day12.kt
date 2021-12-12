@@ -17,9 +17,9 @@ fun main() {
             if (start == end) return listOf(path + listOf(end))
             val newPath = path + listOf(start)
             fun canVisit(n: String) = n != n.lowercase() || !newPath.contains(n)
-            val neighbors = this[start]?.filter { canVisit(it) } ?: emptySet()
-            return neighbors.flatMap { buildPath(newPath, it, end) }
+            return this[start]?.filter { canVisit(it) }?.flatMap { buildPath(newPath, it, end) } ?: emptyList()
         }
+
         return graph.buildPath(emptyList(), "start", "end")
             .onEach { println(it) }
             .size
@@ -40,10 +40,9 @@ fun main() {
                         || !newPath.contains(n)
                         || newPath.filter { it == it.lowercase() }.groupBy { it }.filter { it.value.size > 1 }.isEmpty()
             }
-
-            val neighbors = this[start]?.filter { canVisit(it) } ?: emptySet()
-            return neighbors.flatMap { buildPath(newPath, it, end) }
+            return this[start]?.filter { canVisit(it) }?.flatMap { buildPath(newPath, it, end) } ?: emptyList()
         }
+
         return graph.buildPath(emptyList(), "start", "end")
             .onEach { println(it) }
             .size
