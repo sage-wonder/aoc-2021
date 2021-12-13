@@ -10,11 +10,11 @@ fun main() {
             .filterNot { it.isEmpty() }
             .partition { !it.contains("fold") }
 
-        val dots1 = p1.map { it.split(",").let { it[0].toInt() to it[1].toInt() } }
-        val maxX = dots1.maxOf { it.first }
-        val maxY = dots1.maxOf { it.second }
-        val paper = List(maxY + 1) { MutableList(maxX + 1) { false } }
-        dots1.forEach { (x, y) -> paper[y][x] = true }
+        val dots = p1.map { it.split(",").let { it[0].toInt() to it[1].toInt() } }
+        val maxX = dots.maxOf { it.first } + 1
+        val maxY = dots.maxOf { it.second } + 1
+        val paper = List(maxY) { MutableList(maxX) { false } }
+        dots.forEach { (x, y) -> paper[y][x] = true }
 
         val instructions = p2.map {
             it.removePrefix("fold along ")
