@@ -24,7 +24,7 @@ fun main() {
         return paper to instructions
     }
 
-    fun List<List<Boolean>>.foldX(x: Int): List<List<Boolean>> {
+    fun TransparentPaper.foldX(x: Int): TransparentPaper {
         return this.map { list ->
             val a = list.subList(0, x).reversed()
             val b = list.subList(x + 1, list.size)
@@ -34,7 +34,7 @@ fun main() {
         }
     }
 
-    fun List<List<Boolean>>.foldY(y: Int): List<List<Boolean>> {
+    fun TransparentPaper.foldY(y: Int): TransparentPaper {
         val a = this.subList(0, y).reversed()
         val b = this.subList(y + 1, this.size)
         return List(max(a.size, b.size)) {
