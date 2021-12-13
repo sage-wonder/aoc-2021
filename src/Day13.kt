@@ -1,4 +1,4 @@
-import java.lang.Integer.max
+import kotlin.math.max
 
 typealias TransparentPaper = List<List<Boolean>>
 typealias FoldingInstruction = Pair<String, Int>
