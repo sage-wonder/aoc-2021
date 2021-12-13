@@ -30,7 +30,7 @@ fun main() {
             val b = list.subList(x + 1, list.size)
             List(max(a.size, b.size)) {
                 a.getOrElse(it) { false } || b.getOrElse(it) { false }
-            }
+            }.reversed()
         }
     }
 
