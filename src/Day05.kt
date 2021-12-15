@@ -1,7 +1,3 @@
-typealias SeaFloor = List<MutableList<Int>>
-typealias Coordinate = Pair<Int, Int>
-typealias SeaLine = Pair<Coordinate, Coordinate>
-
 fun initSeaLines(data: List<String>) =
     data.map {
         it.split(" -> ")

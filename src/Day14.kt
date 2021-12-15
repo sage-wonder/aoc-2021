@@ -23,8 +23,7 @@ fun main() {
             input[it].split(" -> ").let { it[0] to it[1] }
         }
 
-        val stems = start.zipWithNext()
-            .map { "${it.first}${it.second}" }
+        val stems = start.zipWithNext().map { "${it.first}${it.second}" }
             .groupBy { it }
             .mapValues { it.value.size.toLong() }
 

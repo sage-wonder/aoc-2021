@@ -1,6 +1,3 @@
-typealias LavaFloor = List<List<Int>>
-typealias Point = Pair<Int, Int>
-
 fun main() {
     fun LavaFloor.isLowPoint(p: Point): Boolean {
         val (x, y) = p
