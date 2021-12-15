@@ -2,10 +2,10 @@ import java.util.PriorityQueue
 import kotlin.math.min
 
 // If out of bounds, returns null
-fun Point.riskLevel(c: Cave) = c.getOrNull(first)?.getOrNull(second)
+fun Point.riskLevel(c: Cave) = c.getOrNull(second)?.getOrNull(first)
 
 fun part1(cave: Cave): Int {
-    val visited = mutableSetOf<Point>()
+
     val totalRisk = mutableMapOf<Point, Int>()
     (cave.indices).forEach { y ->
         (cave[0].indices).forEach { x ->
@@ -14,27 +14,33 @@ fun part1(cave: Cave): Int {
     }
 
     val pq = PriorityQueue<Point>(compareBy { totalRisk[it] })
-
-    fun Point.assessRisk(sumRisk: Int) {
-        val riskValue = riskLevel(cave)
-        if (visited.contains(this) || riskValue == null) return
-        totalRisk[this] = min(sumRisk + riskValue, totalRisk[this] ?: 0)
-        pq.add(this)
-    }
+    val visited = mutableSetOf<Point>()
 
     var curr = Point(0, 0).also { totalRisk[it] = 0 }
     val target = cave[0].size - 1 to cave.size - 1
 
     while (true) {
         val (x, y) = curr
-        val sumRisk = totalRisk[curr]!!
+        val currRisk = totalRisk[curr]!!
+
         listOf(
-            x - 1 to y,
-            x + 1 to y,
-            x to y - 1,
-            x to y + 1
-        ).forEach { it.assessRisk(sumRisk) }
+            Point(x - 1, y),
+            Point(x + 1, y),
+            Point(x, y - 1),
+            Point(x, y + 1)
+        ).forEach { neighbor ->
+            // We only care about neighbors that
+            // - we haven't visited yet
+            // - isn't out of bounds
+            val riskLevel = neighbor.riskLevel(cave)
+            if (!visited.contains(neighbor) && riskLevel != null) {
+                totalRisk[neighbor] = min(currRisk + riskLevel, totalRisk[neighbor] ?: 0)
+                pq.add(neighbor)
+            }
+        }
         visited.add(curr)
+
+        // Move onto next smallest risk point that we haven't visited yet
         while (visited.contains(curr)) {
             curr = pq.remove()
         }
@@ -54,11 +60,10 @@ fun Cave.scaleX(scaleFactor: Int): Cave {
 
 fun Cave.scaleY(scaleFactor: Int): Cave {
     val rowCount = this.size
-    return (1 until scaleFactor).fold(this) { acc, add ->
-        val newGrid = acc.takeLast(rowCount).map { l ->
+    return (1 until scaleFactor).fold(this) { acc, _ ->
+        acc + acc.takeLast(rowCount).map { l ->
             l.map { (it + 1).cap(9) }
         }
-        acc + newGrid
     }
 }
 
@@ -67,7 +72,7 @@ fun part2(cave: Cave): Int {
 }
 
 fun main() {
-    val input = readInput("test").map { it.map { it.digitToInt() } }
+    val input = readInput("day15").map { it.map { it.digitToInt() } }
     println(part1(input))
     println(part2(input))
 }
