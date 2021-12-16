@@ -24,3 +24,5 @@ fun Int.cap(cap: Int): Int {
     val r = this % cap
     return if (r == 0) cap else r
 }
+
+fun Char.hexToBinary() = digitToInt(16).toString(2).padStart(4, '0')

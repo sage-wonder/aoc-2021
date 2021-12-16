@@ -6,13 +6,7 @@ fun Point.riskLevel(c: Cave) = c.getOrNull(second)?.getOrNull(first)
 
 fun part1(cave: Cave): Int {
 
-    val totalRisk = mutableMapOf<Point, Int>()
-    (cave.indices).forEach { y ->
-        (cave[0].indices).forEach { x ->
-            totalRisk[Point(x, y)] = Int.MAX_VALUE
-        }
-    }
-
+    val totalRisk = mutableMapOf<Point, Int>().withDefault { Int.MAX_VALUE }
     val pq = PriorityQueue<Point>(compareBy { totalRisk[it] })
     val visited = mutableSetOf<Point>()
 
@@ -21,7 +15,7 @@ fun part1(cave: Cave): Int {
 
     while (true) {
         val (x, y) = curr
-        val currRisk = totalRisk[curr]!!
+        val currRisk = totalRisk.getValue(curr)
 
         listOf(
             Point(x - 1, y),
@@ -34,7 +28,7 @@ fun part1(cave: Cave): Int {
             // - isn't out of bounds
             val riskLevel = neighbor.riskLevel(cave)
             if (!visited.contains(neighbor) && riskLevel != null) {
-                totalRisk[neighbor] = min(currRisk + riskLevel, totalRisk[neighbor] ?: 0)
+                totalRisk[neighbor] = min(currRisk + riskLevel, totalRisk.getValue(neighbor))
                 pq.add(neighbor)
             }
         }
