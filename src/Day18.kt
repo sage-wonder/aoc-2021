@@ -20,13 +20,13 @@ fun Int.split() = (this / 2.0).let { floor(it).toInt() to ceil(it).toInt() }
 fun Pair<Int, Int>.magnitude() = first * 3 + second * 2
 
 fun String.findExplosionRange() =
-    Regex("""\[\d+,\d+\]""").findAll(this).filter {
+    """\[\d+,\d+\]""".toRegex().findAll(this).filter {
         substring(0, it.range.first).pairCount() >= 4
     }.firstOrNull()
 
-fun String.findSplitRange() = Regex("""\d\d""").find(this)
+fun String.findSplitRange() = """\d\d""".toRegex().find(this)
 
-fun String.findMagnitudeRange() = Regex("""\[\d+,\d+\]""").findAll(this).firstOrNull()
+fun String.findMagnitudeRange() = """\[\d+,\d+\]""".toRegex().find(this)
 
 fun String.explode(match: MatchResult): String {
     println("Exploding ${match.value} found at ${match.range}")
