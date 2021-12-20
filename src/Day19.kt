@@ -116,7 +116,6 @@ fun reduce(src: Scanner, tgt: Scanner): Scanner? {
 fun main() {
     val input = readInput("test").filter { it.isNotEmpty() }
     val scanners = initScanners(input)
-
     var merged: Scanner = scanners[0]
     val remaining = scanners.toMutableSet()
     while (remaining.isNotEmpty()) {
